@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 
 class Markdown{
     public $content;
+    protected $files;
 
     /**
     * Create a new documentation instance.
@@ -15,6 +17,7 @@ class Markdown{
     */
 
     public function __construct(){
+        $this->files = App::make(Filesystem::class);
         $this->content = null;
     }
     /**
@@ -24,17 +27,16 @@ class Markdown{
     */
 
     public function prepareContent($page){
-        $path = 'blogs/'.$page.'.md';
-        $storage = Storage::disk('public');
-        if($storage->exists($path)){
-            $this->content = $storage->get($path);
+        $path = public_path('blogs/'.$page.'.md');
+        if($this->files->exists($path)){
+            $this->content = $this->files->get($path);
             $this->correctImageUrl();
         }
     }
     protected function correctImageUrl(){
         $pattern = '~!\[(.*)\]\((\./)(.+)\)~';
         $this->content = preg_replace_callback($pattern, function($matches){
-            return '!['.$matches[1].'](./storage/blogs/'.$matches[3].')';
+            return '!['.$matches[1].'](./blogs/'.$matches[3].')';
         }
         , $this->content);
     }
