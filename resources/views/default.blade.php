@@ -85,7 +85,12 @@
         <!-- /Google Analytics -->
 
         <script>
-            LaRecipe.run()
+            LaRecipe.run();
+            //Open foreign link in a new tab.
+            $(document.links).filter(function() {
+                return this.hostname != window.location.hostname;
+            }).attr('target', '_blank');
+            //Copy Right
             console.log('UI powered by LaRecipe');
             console.log('Copyright (c) 2018 Saleem Hadad');
             console.log('https://larecipe.binarytorch.com.my/');
