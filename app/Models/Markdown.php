@@ -30,13 +30,15 @@ class Markdown{
         $path = public_path('blogs/'.$page.'.md');
         if($this->files->exists($path)){
             $this->content = $this->files->get($path);
-            $this->correctImageUrl();
+            $this->replaceUrl();
         }
     }
-    protected function correctImageUrl(){
-        $pattern = '~!\[(.*)\]\((\./)(.+)\)~';
-        $this->content = preg_replace_callback($pattern, function($matches){
-            return '!['.$matches[1].'](./blogs/'.$matches[3].')';
+    protected function replaceUrl(){
+        $appUrl = env('APP_URL');
+        $pattern = '~(!?)\[(.*)\]\(([\./]*)(.+)\)~';
+        
+        $this->content = preg_replace_callback($pattern, function($matches) use($appUrl){
+            return $matches[1]=='!' ? "![{$matches[2]}]({$appUrl}blogs/{$matches[4]})":"[{$matches[2]}]({$appUrl}{$matches[4]})";
         }
         , $this->content);
     }
