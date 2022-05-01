@@ -20,7 +20,7 @@ class DocumentationController extends Controller{
         return redirect()->route(
             'documentation.show',
             [
-                'page' => 'overview'
+                'page' => 'updates'
             ]
         );
     }
