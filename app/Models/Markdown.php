@@ -35,7 +35,7 @@ class Markdown{
     }
     protected function replaceUrl(){
         $appUrl = env('APP_URL');
-        $pattern = '~(!?)\[(.*)\]\(([\./]*)(.+)\)~';
+        $pattern = '~(!?)\[(.*)\]\(([\./]+)(.+)\)~';
         
         $this->content = preg_replace_callback($pattern, function($matches) use($appUrl){
             return $matches[1]=='!' ? "![{$matches[2]}]({$appUrl}blogs/{$matches[4]})":"[{$matches[2]}]({$appUrl}{$matches[4]})";
